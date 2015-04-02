@@ -1,0 +1,2 @@
+include *.txt *.cfg *.rst
+graft doc
