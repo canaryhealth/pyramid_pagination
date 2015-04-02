@@ -79,6 +79,43 @@ Then import this from all of the application's request handlers:
      ...
 
 
+Processing Workflow
+===================
+
+When a Paginator gets involved in the handling of a Pyramid request,
+the following happens:
+
+1. Pyramid, as usual, selects the appropriate view handler for a
+   request (via URL traversal, dispatch, or controllers).
+
+2. The `paginate` decorator is invoked, which is an instance of a
+   `Paginator` class.
+
+3. The Paginator's `Decoder` instance examines the request for
+   pagination parameters and ensures their validity, and if there is
+   an error, raises a `formencode.api.Invalid` exception.
+
+4. The `Request` object is decorated with a `.pagination` attribute,
+   which has a reference to the current parameters.
+
+5. The view handler is invoked with the request and processes it,
+   preparing a response result set based any other non-pagination
+   related parameters in the request (i.e. the request query itself).
+
+6. The return value of the view handler is intercepted by the
+   Paginator, which uses the `Mapper` to locate the result set to be
+   paginated (in the case that the return value itself is not the
+   result set to be paginated).
+
+7. The `Engine` is then given the result set and pagination
+   parameters, and performs the actual sorting and pagination, the
+   details of which depend on the data type of the result set.
+
+8. The `Mapper` is then used to splice the final result set and the
+   pagination meta-information back into the return value, and the
+   result is returned to Pyramid.
+
+
 Important Notes
 ===============
 
@@ -463,40 +500,3 @@ during handling and has the following parameters:
   that this is a list of two-element tuples of ``(method, ascending)``
   where the `method` is the method name string, and `ascending` is a
   bool value.
-
-
-Implementation Details
-======================
-
-When a Paginator gets involved in the handling of a Pyramid request,
-the following happens:
-
-1. Pyramid, as usual, selects the appropriate view handler for a
-   request (via URL traversal, dispatch, or controllers).
-
-2. The `paginate` decorator is invoked, which is an instance of a
-   `Paginator` class.
-
-3. The Paginator's `Decoder` instance examines the request for
-   pagination parameters and ensures their validity, and if there is
-   an error, raises a `formencode.api.Invalid` exception.
-
-4. The `Request` object is decorated with a `.pagination` attribute,
-   which has a reference to the current parameters.
-
-5. The view handler is invoked with the request and processes it,
-   preparing a response result set based any other non-pagination
-   related parameters in the request (i.e. the request query itself).
-
-6. The return value of the view handler is intercepted by the
-   Paginator, which uses the `Mapper` to locate the result set to be
-   paginated (in the case that the return value itself is not the
-   result set to be paginated).
-
-7. The `Engine` is then given the result set and pagination
-   parameters, and performs the actual sorting and pagination, the
-   details of which depend on the data type of the result set.
-
-8. The `Mapper` is then used to splice the final result set and the
-   pagination meta-information back into the return value, and the
-   result is returned to Pyramid.
