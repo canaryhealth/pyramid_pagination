@@ -27,6 +27,7 @@ test_dependencies = [
 dependencies = [
   'distribute           >= 0.6.24',
   'argparse             >= 1.2.1',
+  'pyramid              >= 1.4.2',
   'six                  >= 1.6.0',
   'aadict               >= 0.2.1',
   'morph                >= 0.1.1',
