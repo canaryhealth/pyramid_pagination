@@ -143,6 +143,18 @@ of paginated elements and the applicable comparator types:
     The attribute or item key name whose value is to be used to
     compare objects using the built-in ``cmp`` function.
 
+  Example:
+
+  .. code-block:: python
+
+    from pyramid_pagination import paginate
+
+    def cmp_age(a, b):
+      return (a.end - a.start) - (b.end - b.start)
+
+    @paginate(comparers={'value': 'value', 'age': cmp_age})
+    def handler(request): ...
+
 
 * ``sqlalchemy.orm.Query``:
 
@@ -156,15 +168,38 @@ of paginated elements and the applicable comparator types:
 
   * ``callable(pagination, query, method, ascending)``:
 
-    A callable that decorates the `query` in some way and returns
-    the new Query object. The third keyword parameter, `method`, is
-    the name of the current sorting dimension. The fourth keyword
-    parameter, `ascending`, is a bool that indicates whether or not
-    the order should be ascending or descending.
+    A callable that decorates the `query` in some way and returns the
+    new Query object. The first keyword parameter, ``pagination``, is
+    the pagination state object. The third keyword parameter,
+    `method`, is the name of the current sorting dimension. The fourth
+    keyword parameter, `ascending`, is a bool that indicates whether
+    or not the order should be ascending or descending.
 
   * Otherwise:
 
     Anything else is passed directly to `Query.order_by()`.
+
+  Example:
+
+  .. code-block:: python
+
+    from pyramid_pagination import paginate
+
+    def cmp_age(p8n, query, method, ascending):
+      return query.order_by('"end" - "start"' + ( '' if ascending else ' DESC' ))
+
+    @paginate(comparers={'value': 'value', 'age': cmp_age})
+    def handler(request): ...
+
+    # identical to (assuming `model` is an SQLAlchemy ORM model)
+
+    @paginate(comparers={'value': 'value', 'age': ( model.end - model.start )})
+    def handler(request): ...
+
+    # and identical to (assuming `model` has an `age` hybrid_property)
+
+    @paginate(comparers=['value', 'age'])
+    def handler(request): ...
 
 
 Options
