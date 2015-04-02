@@ -247,19 +247,19 @@ its functionality. These options are supported regardless of how it is
 invoked, e.g. as a decorator without arguments, a decorator with
 arguments, or when extending the paginator to create a new paginator.
 
-* ``decoder`` : { dict, list, pyramid_paginate.Decoder }
+* ``decoder`` : { dict, list, pyramid_pagination.Decoder }
 
   Controls how a request's pagination parameters are interpreted.
   See `Decoder Options`_ for details.
 
-* ``mapper`` : { dict, list, pyramid_paginate.Mapper }
+* ``mapper`` : { dict, list, pyramid_pagination.Mapper }
 
   Controls how the paginated elements are extracted from the handler's
   return value and how the pagination result and parameters are
   injected into the final return value. See `Mapper Options`_ for
   details.
 
-* ``engine`` : { dict, list, pyramid_paginate.Engine }
+* ``engine`` : { dict, list, pyramid_pagination.Engine }
 
   Controls how a result set is sorted and paginated. See `Engine
   Options`_ for details.
@@ -319,7 +319,7 @@ Decoder Options
 ===============
 
 When specifying options to the paginator `decoder` attribute, it can
-either be a `pyramid_paginate.Decoder` subclass instance or a set of
+either be a `pyramid_pagination.Decoder` subclass instance or a set of
 parameters that will be passed on directly to the current decoder's
 `.extend()` method. The decoder supports the following options:
 
@@ -382,7 +382,7 @@ Mapper Options
 ==============
 
 When specifying options to the paginator `mapper` attribute, it can
-either be a `pyramid_paginate.Mapper` subclass instance or a set of
+either be a `pyramid_pagination.Mapper` subclass instance or a set of
 parameters that will be passed on directly to the current mapper's
 `.extend()` method. The mapper supports the following options:
 
@@ -427,7 +427,7 @@ Engine Options
 ==============
 
 When specifying options to the paginator `engine` attribute, it can
-either be a `pyramid_paginate.Engine` subclass instance or a set of
+either be a `pyramid_pagination.Engine` subclass instance or a set of
 parameters that will be passed on directly to the current engine's
 `.extend()` method. The engine supports the following options:
 
