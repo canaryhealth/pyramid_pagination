@@ -112,7 +112,11 @@ class Paginator(object):
       return None
     if isinstance(handle, Paginator):
       return handle
-    for cell in reversed(six.get_function_closure(handle) or ()):
+    try:
+      handle = six.get_function_closure(handle)
+    except AttributeError:
+      handle = None
+    for cell in reversed(handle or ()):
       cell = Paginator.get_paginator(cell.cell_contents)
       if cell is not None:
         return cell
