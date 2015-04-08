@@ -314,6 +314,54 @@ arguments, or when extending the paginator to create a new paginator.
   The pyramid request attribute name where the per-request pagination
   state object will be stored.
 
+* ``map_item`` : callable, default: null
+
+  Specifies a callback function that allows each object selected for
+  the current page to be remapped in some way. The callback gets
+  invoked after the result set is narrowed to the selected page. This
+  function is called once for each item with the following keyword
+  arguments:
+
+  * ``state`` : the pagination state object
+  * ``result`` : the initial non-paginated result
+  * ``value`` : the subset of `result` selected for the current page
+  * ``item`` : the current item being 
+  * ``attributes`` : some of the current page attributes
+
+  The return value should be the remapped item by itself.
+
+* ``map_list`` : callable, default: null
+
+  Specifies a callback function that allows the list of objects
+  selected for the current page to be remapped in some way. The
+  callback gets invoked after the result set is narrowed to the
+  selected page and each item was passed through `map_item`. This
+  function is called once per pagination request with the following
+  keyword arguments:
+
+  * ``state`` : the pagination state object
+  * ``result`` : the initial non-paginated result
+  * ``value`` : the subset of `result` selected for the current page
+  * ``attributes`` : some of the current page attributes
+
+  The return value should be a tuple of the ``(adjusted_value,
+  adjusted_attributes)``.
+
+* ``map_return`` : callable, default: null
+
+  Specifies a callback function that allows the final pagination
+  return value to be remapped in some way. The callback gets invoked
+  after the result set is narrowed to the selected page, `map_item`
+  and `map_list` are applied, and any `Mapper` injections take place.
+  This function is called once per pagination request with the
+  following keyword arguments:
+
+  * ``state`` : the pagination state object
+  * ``result`` : the initial non-paginated result
+  * ``value`` : the current return value
+
+  The return value should be the adjusted `value`.
+
 
 Decoder Options
 ===============

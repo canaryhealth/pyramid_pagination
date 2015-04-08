@@ -376,6 +376,51 @@ class TestListPagination(unittest.TestCase):
         ],
         page   = dict(offset=0, limit=25, count=4, attribute='result')))
 
+  #----------------------------------------------------------------------------
+  def test_map_item(self):
+    from .paginator import paginate
+    import formencode.api
+    @paginate(
+      limit_default=3,
+      map_item=lambda item, **kw: dict(i=item, s=str(item)))
+    def n30(request):
+      return list(range(30))
+    self.assertEqual(
+      n30(self.request()),
+      dict(
+        result = [dict(i=0, s='0'), dict(i=1, s='1'), dict(i=2, s='2')],
+        page   = {'count': 30, 'attribute': 'result', 'limit': 3, 'offset': 0}))
+
+  #----------------------------------------------------------------------------
+  def test_map_list(self):
+    from .paginator import paginate
+    import formencode.api
+    @paginate(
+      limit_default=5,
+      map_list=lambda value, attributes, **kw: (value[:-1], attributes))
+    def n30(request):
+      return list(range(30))
+    self.assertEqual(
+      n30(self.request()),
+      dict(
+        result = [0, 1, 2, 3],
+        page   = {'count': 30, 'attribute': 'result', 'limit': 5, 'offset': 0}))
+
+  #----------------------------------------------------------------------------
+  def test_map_return(self):
+    from .paginator import paginate
+    import formencode.api
+    @paginate(
+      limit_default=5,
+      map_return=lambda value, **kw: dict(wrapper=value))
+    def n30(request):
+      return list(range(30))
+    self.assertEqual(
+      n30(self.request()),
+      dict(wrapper=dict(
+        result = [0, 1, 2, 3, 4],
+        page   = {'count': 30, 'attribute': 'result', 'limit': 5, 'offset': 0})))
+
 
 #------------------------------------------------------------------------------
 class TestSqlalchemyPagination(unittest.TestCase):

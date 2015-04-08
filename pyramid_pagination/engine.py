@@ -40,19 +40,19 @@ class Engine(object):
     return self.__class__(**params)
 
   #----------------------------------------------------------------------------
-  def apply(self, p8n, value):
+  def apply(self, p8n, result):
     '''
     Returns a two-element tuple of ``(narrowed_value, page_attributes)``.
     '''
-    if isinstance(value, sqlalchemy.orm.Query):
-      return self.apply_sqlalchemy_orm_query_query(p8n, value)
-    try: value = list(value)
+    if isinstance(result, sqlalchemy.orm.Query):
+      return self.apply_sqlalchemy_orm_query_query(p8n, result)
+    try: result = list(result)
     except: pass
     try:
-      method = getattr(self, 'apply_' + self.route(value))
+      implementation = getattr(self, 'apply_' + self.route(result))
     except:
-      raise ValueError('No pagination available for %r' % (type(value),))
-    return method(p8n, value)
+      raise ValueError('No pagination available for %r' % (type(result),))
+    return implementation(p8n, result)
 
   #----------------------------------------------------------------------------
   def route(self, value):

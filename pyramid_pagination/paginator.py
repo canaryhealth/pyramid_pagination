@@ -31,17 +31,20 @@ def _extend(klass, base, spec):
 class Paginator(object):
 
   DEFAULTS = dict(
-    page_name        = 'page',          # the pagination parameters namespace
-    offset_name      = 'offset',        # the `offset` parameter name
-    offset_default   = 0,               # the `offset` parameter name
-    limit_name       = 'limit',         # the `limit` parameter name
-    limit_default    = 25,              # the `limit` default value
-    sort_name        = 'sort',          # the `sort` parameter name
-    sort_default     = SmartSort,       # the `sort` default value
-    count_name       = 'count',         # the `count` response parameter name
-    attribute_name   = 'attribute',     # the `attribute` response parameter name
-    result_name      = 'result',        # the `result` response namespace
-    request_name     = 'pagination',    # the pyramid request attribute name for pagination
+    page_name        = 'page',          # pagination parameters namespace
+    offset_name      = 'offset',        # `offset` parameter name
+    offset_default   = 0,               # `offset` default value
+    limit_name       = 'limit',         # `limit` parameter name
+    limit_default    = 25,              # `limit` default value
+    sort_name        = 'sort',          # `sort` parameter name
+    sort_default     = SmartSort,       # `sort` default value
+    count_name       = 'count',         # `count` response parameter name
+    attribute_name   = 'attribute',     # `attribute` response parameter name
+    result_name      = 'result',        # `result` response namespace
+    request_name     = 'pagination',    # pyramid request attribute name for pagination
+    map_item         = None,            # per-item result callback hook
+    map_list         = None,            # entire result callback hook
+    map_return       = None,            # return value callback hook
   )
 
   #----------------------------------------------------------------------------
@@ -102,8 +105,18 @@ class Paginator(object):
     result = handler(*args, **kw)
     value  = self.mapper.get(p8n, result)
     value  = self.engine.apply(p8n, value)
-    result = self.mapper.put(p8n, result, value)
-    return result
+    if self.map_item:
+      value = ([
+        self.map_item(
+          state=p8n, result=result, value=value[0], item=item, attributes=value[1])
+        for item in value[0]], value[1])
+    if self.map_list:
+      value = self.map_list(
+        state=p8n, result=result, value=value[0], attributes=value[1])
+    value = self.mapper.put(p8n, result, value)
+    if self.map_return:
+      return self.map_return(state=self, result=result, value=value)
+    return value
 
   #----------------------------------------------------------------------------
   @staticmethod
