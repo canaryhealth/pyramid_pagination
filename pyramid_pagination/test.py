@@ -381,7 +381,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_map_item(self):
     from .paginator import paginate
-    import formencode.api
     @paginate(
       limit_default=3,
       force_list=False,
@@ -400,7 +399,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_map_item_backwardcompatibility(self):
     from .paginator import paginate
-    import formencode.api
     @paginate(
       limit_default=3,
       map_item=lambda item, **kw: dict(i=item, s=str(item)))
@@ -415,7 +413,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_map_list(self):
     from .paginator import paginate
-    import formencode.api
     @paginate(
       limit_default=5,
       map_list=lambda value, attributes, **kw: (value[:-1], attributes))
@@ -430,7 +427,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_map_return(self):
     from .paginator import paginate
-    import formencode.api
     @paginate(
       limit_default=5,
       map_return=lambda value, **kw: dict(wrapper=value))
@@ -445,7 +441,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_map_return_receives_pagination_state(self):
     from .paginator import paginate, Paginator
-    import formencode.api
     @paginate(
       limit_default=5,
       map_return=lambda value, state, **kw: state)
@@ -458,7 +453,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_keep_items_default(self):
     from .paginator import paginate
-    import formencode.api
     @paginate(
       limit_default=5,
       map_return=lambda value, state, **kw: dict(wrapper=value, items=state.get('items')))
@@ -473,7 +467,6 @@ class TestListPagination(unittest.TestCase):
   #----------------------------------------------------------------------------
   def test_keep_items_enabled(self):
     from .paginator import paginate
-    import formencode.api
     @paginate(
       limit_default=5,
       keep_items=True,
