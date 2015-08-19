@@ -479,6 +479,18 @@ class TestListPagination(unittest.TestCase):
         result = (0, 1, 2, 3, 4),
         page   = {'count': 30, 'attribute': 'result', 'limit': 5, 'offset': 0})))
 
+  #----------------------------------------------------------------------------
+  def test_tuple(self):
+    from .paginator import paginate
+    @paginate(limit_default=3)
+    def t30(request):
+      return tuple(range(30))
+    self.assertEqual(
+      t30(self.request()),
+      dict(
+        result = [0, 1, 2],
+        page   = {'count': 30, 'attribute': 'result', 'limit': 3, 'offset': 0}))
+
 
 #------------------------------------------------------------------------------
 class TestSqlalchemyPagination(unittest.TestCase):

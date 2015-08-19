@@ -49,7 +49,9 @@ class Engine(object):
     '''
     if isinstance(result, sqlalchemy.orm.Query):
       return self.apply_sqlalchemy_orm_query_query(p8n, result)
-    try: result = list(result)
+    if isinstance(result, (list, tuple)):
+      return self.apply_list(p8n, result)
+    try: result = tuple(result)
     except: pass
     try:
       implementation = getattr(self, 'apply_' + self.route(result))
