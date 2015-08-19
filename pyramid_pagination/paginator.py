@@ -42,6 +42,7 @@ class Paginator(object):
     attribute_name   = 'attribute',     # `attribute` response parameter name
     result_name      = 'result',        # `result` response namespace
     request_name     = 'pagination',    # pyramid request attribute name for pagination
+    keep_items       = False,           # keep the narrowed set in `state.items`?
     force_list       = True,            # force the result set to be a list/tuple?
     map_item         = None,            # per-item result callback hook
     map_list         = None,            # entire result callback hook
@@ -106,6 +107,9 @@ class Paginator(object):
     result = handler(*args, **kw)
     value  = self.mapper.get(p8n, result)
     value  = self.engine.apply(p8n, value)
+    if self.keep_items:
+      p8n['items'] = tuple(value[0])
+      value = ( p8n['items'], value[1] )
     if self.map_item:
       def mapped_item_generator(items, attrs):
         for item in items:

@@ -362,6 +362,16 @@ arguments, or when extending the paginator to create a new paginator.
 
   The return value should be the adjusted `value`.
 
+* ``keep_items`` : bool, default: false
+
+  By default, the narrowed result set (i.e. the items selected for the
+  currently requested page) is not kept around as it passes through
+  the mappers (such as `map_item`). If `keep_items` is enabled, the
+  narrowed result set is cached in the `items` attribute of the
+  pagination state object. Note that `items` is a method name of the
+  state object, so it needs to be accessed via item-access,
+  e.g. ``state['items']`` or ``state.get('items')``.
+
 * ``force_list`` : bool, default: true
 
   The Paginator tries to operate as leanly memory-wise as possible,

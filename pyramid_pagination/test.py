@@ -455,6 +455,37 @@ class TestListPagination(unittest.TestCase):
     self.assertIsInstance(state, aadict)
     self.assertIsInstance(state.paginator, Paginator)
 
+  #----------------------------------------------------------------------------
+  def test_keep_items_default(self):
+    from .paginator import paginate
+    import formencode.api
+    @paginate(
+      limit_default=5,
+      map_return=lambda value, state, **kw: dict(wrapper=value, items=state.get('items')))
+    def n30(request):
+      return list(range(30))
+    self.assertEqual(
+      n30(self.request()),
+      dict(items=None, wrapper=dict(
+        result = [0, 1, 2, 3, 4],
+        page   = {'count': 30, 'attribute': 'result', 'limit': 5, 'offset': 0})))
+
+  #----------------------------------------------------------------------------
+  def test_keep_items_enabled(self):
+    from .paginator import paginate
+    import formencode.api
+    @paginate(
+      limit_default=5,
+      keep_items=True,
+      map_return=lambda value, state, **kw: dict(wrapper=value, items=state.get('items')))
+    def n30(request):
+      return list(range(30))
+    self.assertEqual(
+      n30(self.request()),
+      dict(items=(0, 1, 2, 3, 4), wrapper=dict(
+        result = (0, 1, 2, 3, 4),
+        page   = {'count': 30, 'attribute': 'result', 'limit': 5, 'offset': 0})))
+
 
 #------------------------------------------------------------------------------
 class TestSqlalchemyPagination(unittest.TestCase):
