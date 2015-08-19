@@ -106,10 +106,11 @@ class Paginator(object):
     value  = self.mapper.get(p8n, result)
     value  = self.engine.apply(p8n, value)
     if self.map_item:
-      value = ([
-        self.map_item(
-          state=p8n, result=result, value=value[0], item=item, attributes=value[1])
-        for item in value[0]], value[1])
+      def mapped_item_generator(items, attrs):
+        for item in items:
+          yield self.map_item(
+            state=p8n, result=result, value=items, item=item, attributes=attrs)
+      value = ( mapped_item_generator(value[0], value[1]), value[1] )
     if self.map_list:
       value = self.map_list(
         state=p8n, result=result, value=value[0], attributes=value[1])

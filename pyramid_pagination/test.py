@@ -6,7 +6,9 @@
 # copy: (C) Copyright 2015-EOT Canary Health, Inc., All Rights Reserved.
 #------------------------------------------------------------------------------
 
+import types
 import unittest
+
 from aadict import aadict
 import morph
 from pyramid.request import Request
@@ -385,8 +387,11 @@ class TestListPagination(unittest.TestCase):
       map_item=lambda item, **kw: dict(i=item, s=str(item)))
     def n30(request):
       return list(range(30))
+    ret = n30(self.request())
+    self.assertIsInstance(ret['result'], types.GeneratorType)
+    ret['result'] = list(ret['result'])
     self.assertEqual(
-      n30(self.request()),
+      ret,
       dict(
         result = [dict(i=0, s='0'), dict(i=1, s='1'), dict(i=2, s='2')],
         page   = {'count': 30, 'attribute': 'result', 'limit': 3, 'offset': 0}))
