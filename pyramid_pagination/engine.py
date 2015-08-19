@@ -6,11 +6,12 @@
 # copy: (C) Copyright 2015-EOT Canary Health, Inc., All Rights Reserved.
 #------------------------------------------------------------------------------
 
+from collections import OrderedDict
+
 import six
 import morph
 import sqlalchemy
 import sqlalchemy.orm
-from collections import OrderedDict
 
 from .decoder import SmartSort
 
@@ -25,6 +26,8 @@ class Engine(object):
   def __init__(self, comparers={}, *args, **kw):
     super(Engine, self).__init__(*args, **kw)
     self.comparers = OrderedDict()
+    if morph.isstr(comparers):
+      comparers = [comparers]
     if morph.isseq(comparers) and len(comparers) > 0 \
         and not morph.isseq(comparers[0]):
       self.comparers.update((k, k) for k in comparers)
