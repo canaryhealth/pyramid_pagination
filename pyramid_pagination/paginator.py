@@ -119,7 +119,7 @@ class Paginator(object):
       value = ( tuple(value[0]), value[1] )
     value = self.mapper.put(p8n, result, value)
     if self.map_return:
-      return self.map_return(state=self, result=result, value=value)
+      return self.map_return(state=p8n, result=result, value=value)
     return value
 
   #----------------------------------------------------------------------------

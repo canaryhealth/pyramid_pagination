@@ -442,6 +442,19 @@ class TestListPagination(unittest.TestCase):
         result = [0, 1, 2, 3, 4],
         page   = {'count': 30, 'attribute': 'result', 'limit': 5, 'offset': 0})))
 
+  #----------------------------------------------------------------------------
+  def test_map_return_receives_pagination_state(self):
+    from .paginator import paginate, Paginator
+    import formencode.api
+    @paginate(
+      limit_default=5,
+      map_return=lambda value, state, **kw: state)
+    def n30(request):
+      return list(range(30))
+    state = n30(self.request())
+    self.assertIsInstance(state, aadict)
+    self.assertIsInstance(state.paginator, Paginator)
+
 
 #------------------------------------------------------------------------------
 class TestSqlalchemyPagination(unittest.TestCase):
