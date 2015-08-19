@@ -384,6 +384,7 @@ class TestListPagination(unittest.TestCase):
     import formencode.api
     @paginate(
       limit_default=3,
+      force_list=False,
       map_item=lambda item, **kw: dict(i=item, s=str(item)))
     def n30(request):
       return list(range(30))
@@ -394,6 +395,21 @@ class TestListPagination(unittest.TestCase):
       ret,
       dict(
         result = [dict(i=0, s='0'), dict(i=1, s='1'), dict(i=2, s='2')],
+        page   = {'count': 30, 'attribute': 'result', 'limit': 3, 'offset': 0}))
+
+  #----------------------------------------------------------------------------
+  def test_map_item_backwardcompatibility(self):
+    from .paginator import paginate
+    import formencode.api
+    @paginate(
+      limit_default=3,
+      map_item=lambda item, **kw: dict(i=item, s=str(item)))
+    def n30(request):
+      return list(range(30))
+    self.assertEqual(
+      n30(self.request()),
+      dict(
+        result = (dict(i=0, s='0'), dict(i=1, s='1'), dict(i=2, s='2')),
         page   = {'count': 30, 'attribute': 'result', 'limit': 3, 'offset': 0}))
 
   #----------------------------------------------------------------------------

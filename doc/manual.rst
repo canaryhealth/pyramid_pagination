@@ -362,6 +362,16 @@ arguments, or when extending the paginator to create a new paginator.
 
   The return value should be the adjusted `value`.
 
+* ``force_list`` : bool, default: true
+
+  The Paginator tries to operate as leanly memory-wise as possible,
+  and for this reason uses generators for handling items. The final
+  hand-off result to the upstream handlers can therefore include
+  generators. This option (when set to true), will force the result
+  set to be a tuple or list, which is necessary if upstream handlers
+  can't handle generators. To be safe (and backward-compatible), this
+  defaults to true.
+
 
 Decoder Options
 ===============

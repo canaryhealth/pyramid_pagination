@@ -42,6 +42,7 @@ class Paginator(object):
     attribute_name   = 'attribute',     # `attribute` response parameter name
     result_name      = 'result',        # `result` response namespace
     request_name     = 'pagination',    # pyramid request attribute name for pagination
+    force_list       = True,            # force the result set to be a list/tuple?
     map_item         = None,            # per-item result callback hook
     map_list         = None,            # entire result callback hook
     map_return       = None,            # return value callback hook
@@ -114,6 +115,8 @@ class Paginator(object):
     if self.map_list:
       value = self.map_list(
         state=p8n, result=result, value=value[0], attributes=value[1])
+    if self.force_list and not isinstance(value[0], (tuple, list)):
+      value = ( tuple(value[0]), value[1] )
     value = self.mapper.put(p8n, result, value)
     if self.map_return:
       return self.map_return(state=self, result=result, value=value)
