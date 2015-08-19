@@ -79,6 +79,43 @@ Then import this from all of the application's request handlers:
      ...
 
 
+Concepts
+========
+
+
+Paginator
+---------
+
+This is the main pyramid_pagination object that gets used as a request
+handler decorator. It is responsible for orchestrating the Decoder,
+Engine, and Mapper activities to narrow a result set to the requested
+page.
+
+
+Decoder
+-------
+
+The pagination Decoder object interprets and validates request
+parameters intended to control the Paginator behaviour.
+
+
+Engine
+------
+
+The pagination Engine object does the real work: it determines which
+items in a result set fit the current request parameters. The main
+facets are sorting, offset, and limit. This process is referred to as
+:term:`narrowing` the result set.
+
+
+Mapper
+------
+
+The pagination Mapper object extracts the result set to be narrowed
+from the request handler's return value. It is also responsible for
+then creating the return value from the pagination.
+
+
 Processing Workflow
 ===================
 
