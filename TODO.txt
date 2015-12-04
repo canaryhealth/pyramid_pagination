@@ -1,2 +1,3 @@
+* move to use armor instead of formencode
 * rename `p8n` references to `state`
 * rename `request_name` configuration to `state_name`
