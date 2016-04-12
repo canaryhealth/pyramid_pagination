@@ -174,7 +174,7 @@ Important Notes
     @paginate(comparers=(('meth1', axis_1), ('meth2', axis_2)))
 
     # define default sort via OrderedDict
-    @paginate(comparers=OrderedDict(meth1=axis_1, meth2=axis_2))
+    @paginate(comparers=collections.OrderedDict(meth1=axis_1, meth2=axis_2))
 
     # define default sort explicitly
     @paginate(comparers=dict(meth1=axis_1, meth2=axis_2), sort_default='meth1,meth2')
