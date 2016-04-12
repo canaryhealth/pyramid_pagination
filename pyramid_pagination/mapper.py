@@ -21,7 +21,7 @@ class Mapper(object):
   #----------------------------------------------------------------------------
   def __init__(self, target=None, *args, **kw):
     super(Mapper, self).__init__(*args, **kw)
-    self.target = None
+    self.target = target
 
   #----------------------------------------------------------------------------
   def extend(self, *args, **kw):
