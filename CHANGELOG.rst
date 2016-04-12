@@ -3,6 +3,12 @@ ChangeLog
 =========
 
 
+v0.1.6
+======
+
+* Fixed Mapper "target" constructor override
+
+
 v0.1.5
 ======
 
